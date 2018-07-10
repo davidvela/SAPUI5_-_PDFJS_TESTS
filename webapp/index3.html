@@ -90,7 +90,9 @@
 		 sThirdPartyPath = jQuery.sap.getModulePath("nabi.m.thirdparty");
 		 //sViewerPath = sThirdPartyPath + "/pdfjs/web/viewer.html";
 		 sViewerPath = "./libs/nabi/m/thirdparty/pdfjs/web/viewer.html";
-		 var src =  sViewerPath + "?file=" + "OpenUI5.pdf"
+		 //var src =  sViewerPath + "?file=" + "OpenUI5.pdf"
+		 var src =  sViewerPath + "?file=" + "http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf" // not workindg!
+		 // Error: file origin does not match viewer's -> validateFileURL
 	     document.getElementById("frame").src = src;
 	}
 	</script>
