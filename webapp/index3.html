@@ -23,7 +23,7 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 
 		<script>
-			/* */
+			/* 
 			sap.ui.getCore().attachInit(function() {
 				// new sap.m.Shell({
 					// app: new sap.ui.core.ComponentContainer({
@@ -37,18 +37,46 @@
 								content: [ new sap.ui.core.ComponentContainer({  height : "100%", name : "nabi.demo.MyLibraryDemoApp"  })]  })
 					  ]
 				}).placeAt("content");
-			});
+			});*/
 		</script>
+	
+	
+	
+	<script>
+	
+		 var sViewerPath, sThirdPartyPath;
+		 sThirdPartyPath = jQuery.sap.getModulePath("nabi.m.thirdparty");
+		 sViewerPath = sThirdPartyPath + "/pdfjs/web/viewer.html";
+		 
+		 var src =  sViewerPath + "?file=" + "static/OpenUI5.pdf"
+		// PDFViewerRenderer.render = function(oRm, oControl) {
+
+		// 	oRm.write("<iframe");
+		// 	oRm.writeControlData(oControl);
+
+		// 	oRm.addClass("nabiMPDFViewer");
+		// 	oRm.writeClasses();
+
+		// 	oRm.writeAttribute("src", sViewerPath + "?file=" + oControl.getSource());
+		// 	oRm.writeAttribute("height", oControl.getHeight());
+		// 	oRm.writeAttribute("width", oControl.getWidth());
+
+		// 	oRm.write("></iframe>");
+	</script>
+	
 	
 	</head>
 
 	<body class="sapUiBody" id="content">
-		<!--<button onclick="myFunction()">test button</button>-->
-		<!--<br>-->
-		<!--<iframe width="500px" height = "500px" id='frame'></iframe>-->
+
+		<button onclick="myFunction()">test button</button>-->
+		<br>
+		<iframe width="500px" height = "500px" id='frame'></iframe>
 		<!--<canvas id="the-canvas"></canvas>-->
 		<!--test-->
 		<!--<p id="demo"></p>-->
+		
+		
 	<script>
 	function myFunction() {
 		// document.getElementById("demo").innerHTML = "Hello World";
