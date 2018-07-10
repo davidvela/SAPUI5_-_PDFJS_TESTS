@@ -1,0 +1,21 @@
+<mvc:View
+	controllerName="nabi.demo.MyLibraryDemoApp.controller.PDFViewer"
+	xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:nabi="nabi.m"
+	height="100%">
+	
+
+
+	<!-- in real apps you would get the PDF from somewhere else 
+	<nabi:PDFViewer source="static/OpenUI5.pdf"/>
+	-->
+	<Page
+		title="nabi.m.PDFViewer" showNavButton="true" navButtonPress="onNavBack">
+		<content>
+			<nabi:PDFViewer source="static/OpenUI5.pdf"/>
+		</content>
+	</Page>
+	
+</mvc:View>
