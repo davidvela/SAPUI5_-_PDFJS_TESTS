@@ -55,7 +55,7 @@ sap.ui.define([
 			events: { }
 		},
 
-		init: function () { }
+		init: function () {		}
 
 	});
 
