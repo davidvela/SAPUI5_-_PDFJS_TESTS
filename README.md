@@ -18,4 +18,4 @@ githubs:
 
 # Screenshots: 
 
-![img1](https://github.com/davidvela/SAPUI5_-_PDFJS_TESTS/blob/master/webapp/assets/img1.JPG)
+![img1](https://github.com/davidvela/SAPUI5_-_PDFJS_TESTS/blob/master/webapp/assets/img1.PNG)
