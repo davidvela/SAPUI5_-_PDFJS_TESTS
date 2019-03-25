@@ -10,3 +10,6 @@ githubs:
 
  
 
+# Next: 
+* manually implementation of buttons in old PDFJS Viewer! 
+* Add screenshots
