@@ -1,0 +1,27 @@
+<%@page language="abap"%>
+<%@extension name="htmlb" prefix="htmlb"%>
+
+<htmlb:content design="design2003">
+  <htmlb:page title = " ">
+    <htmlb:form>
+      <xhtmlb:toolbarButton id            = "id1"
+                            onClientClick = "close_win();"
+                            text          = "button1" />
+      <htmlb:button id            = "id2"
+                    onClientClick = "close_win();"
+                    text          = "button2" />
+      <htmlb:button id            = "id3"
+                    onClientClick = "close_win();"
+                    text          = "button2" />
+    </htmlb:form>
+    <htmlb:form>
+
+      <htmlb:textView     text          = "Hello World!"
+                          design        = "EMPHASIZED" />
+
+      <htmlb:button       text          = "Press Me"
+                          onClick       = "myClickHandler" />
+
+    </htmlb:form>
+  </htmlb:page>
+</htmlb:content>
