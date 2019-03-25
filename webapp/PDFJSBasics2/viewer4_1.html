@@ -1,0 +1,444 @@
+<!-- v4.1 - icon viewer -->
+<!DOCTYPE html>
+<html dir="ltr" mozdisallowselectionprint moznomarginboxes>
+  <head>
+    <script type="text/javascript" src="extras/jquery.min.1.7.js"></script>
+    <script type="text/javascript" src="extras/modernizr.2.5.3.min.js"></script>
+    <script type="text/javascript" src="build/hash.js"></script>
+    <style>
+        /*body {background-color: powderblue;}*/
+        /*h1   {color: blue;}*/
+        /*p    {color: red;}*/
+        .button {
+          background-color: black; /* Black */
+        }
+        #the-canvas {
+          border:1px solid black;
+        }
+        #printContainer {
+          display: none;
+        }
+        @media print {
+          /* General rules for printing. */
+          body {
+            background: transparent none;
+            display: none;   /*block control P  */
+          }
+        }
+        /* Popup box BEGIN */
+        .hover_bkgr_fricc{
+            background:rgba(0,0,0,.4);
+            cursor:pointer;
+            display:none;
+            height:100%;
+            position:fixed;
+            text-align:center;
+            top:0;
+            width:100%;
+            z-index:10000;
+        }
+        .hover_bkgr_fricc .helper{
+            display:inline-block;
+            height:100%;
+            vertical-align:middle;
+        }
+        .hover_bkgr_fricc > div {
+            background-color: #fff;
+            box-shadow: 10px 10px 60px #555;
+            display: inline-block;
+            height: auto;
+            max-width: 551px;
+            min-height: 100px;
+            vertical-align: middle;
+            width: 60%;
+            position: relative;
+            border-radius: 8px;
+            padding: 15px 5%;
+        }
+        .popupCloseButton {
+            background-color: #fff;
+            border: 3px solid #999;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-block;
+            font-family: arial;
+            font-weight: bold;
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 25px;
+            line-height: 30px;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+        }
+        .popupCloseButton:hover {
+            background-color: #ccc;
+        }
+        .trigger_popup_fricc {
+            cursor: pointer;
+            font-size: 20px;
+            margin: 20px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        /* Popup box BEGIN */
+
+    </style>
+  </head>
+<!-- onload="renderPage(1)" -->
+<body  tabindex="1" class="loadingInProgress" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+<h1>TWA - Telescope Web Application</h1>
+<h2 id="docName">Document Name</h2>
+<div>
+  <!-- <button id="st" title="Connected to the Backend">ST</button> -->
+  <button id="st" title="Connected to the Backend"  class="button">
+    <img src="./images/circleGreen.png" height = "20px" width = "20px" /></button>
+	  &nbsp; &nbsp;
+  <!-- <button id="prev" title="Previous Page">Previous</button> -->
+  <button id="prev" title="Previous Page" class="button">
+    <img src="./images/findbarButton-previous.png"  /></button>
+  <!-- <button id="next" title="Next Page">Next</button> -->
+  <button id="next" title="Next Page"  class="button">
+    <img src="./images/findbarButton-next.png" /></button>
+    &nbsp; &nbsp;
+  <!-- <span>Page: <span id="page_num2"></span> / <span id="page_count"></span></span> -->
+  <span>Page: <input id="page_num2" type="text" maxlength="4" size="4"/> / <span id="page_count"></span></span>
+    &nbsp; &nbsp;
+  <!-- <button id="zoom_out" title="Zoom Out">Zoom Out --</button> -->
+  <button id="zoom_out" title="Zoom Out" class="button">  
+    <img src="./images/toolbarButton-zoomOut.png" />  
+  </button>
+  <!-- <button id="zoom_in" title="Zoom In">Zoom In ++ </button> -->
+  <button id="zoom_in" title="Zoom In" class="button"> 
+    <img src="./images/toolbarButton-zoomIn.png" /></button>
+  &nbsp; &nbsp;
+  <!-- <button id="Inf" title="Document Properties">Inf</button> -->
+  <button id="Inf" title="Document Properties" class="button">
+    <img src="./images/documentProperties.png" /></button>
+  <!-- <button id="Exit">Exit</button> -->
+</div>
+<canvas id="the-canvas" width="500px" height="500px"></canvas>
+
+<!-- popup - Document Properties -->
+<div id = "popup" class="hover_bkgr_fricc">
+    <span class="helper"></span>
+    <div>
+        <!-- <div class="popupCloseButton">X</div> -->
+        <p>Document Properties ... title: xxxx, <br/> author: xxxx <br/> , subject: xxxx <br/> , keywords: xxxx <br/>, creation date, creator ... file size.   
+          <br />click anywhere to close the popup box!</p>
+    </div>
+</div>
+
+</body>
+
+
+<!-- <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>  -->
+<script src="build/pdf.js"></script>
+ <!--import PDFJSWorker from "worker-loader!pdfjs-dist/build/pdf.worker.js"; -->
+<script src="build/pdf.worker.js" ></script>
+<!-- <script src="viewer.js"></script> -->
+
+<script> console.log("Script -- v2.1")
+
+// If absolute URL from the remote server is provided, configure the CORS
+// header on that server.
+
+var url = 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
+// var url = 'server/pdfhandler?sap-client=200&REQ_NAME=PDF_DOC&DOC_NAME=OPENUI5&DOC_PAGE=2&DOC_TYPE=PDF&DOC_VERS=2.2&DOC_LANG=EN';
+// var url = 'compressed.tracemonkey-pldi-09.pdf';
+// The workerSrc property shall be specified.
+PDFJS.workerSrc = './build/pdf.worker.js';
+//?DOC_NAME=OPENUI5&DOC_PAGE=1&DOC_TYPE=PDF&DOC_VERS=2.2&DOC_LANG=EN
+
+var pdfDoc = null,
+    pageNum  = 1,
+    page_total = 14, 
+    pageRendering = false,
+    pageNumPending = null,
+    scale = 1.25,
+    canvas = document.getElementById('the-canvas'),
+    ctx = canvas.getContext('2d');
+
+var l_doc_name = "DOC_NAME", l_page = 1, l_type = "DOC_TYPE", l_vers = "DOC_VERS", l_lang = "DOC_LANG";   
+    
+
+/** Get page info from document, resize canvas accordingly, and render page.
+ * @param num Page number.
+ */
+var renderPage= function ( num ){
+  pageRendering = true;
+  // Using promise to fetch the page
+  pdfDoc.getPage(num).then(function(page) {
+    var viewport = page.getViewport(scale);
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    
+    // Render PDF page into canvas context
+    var renderContext = {
+      canvasContext: ctx,
+      viewport: viewport
+    };
+    var renderTask = page.render(renderContext);
+    // Wait for rendering to finish
+    renderTask.promise.then(function() {
+      pageRendering = false;
+      if (pageNumPending !== null) {
+        // New page rendering is pending
+        renderPage(pageNumPending);
+        pageNumPending = null;
+      }
+    });
+  });
+  // Update page counters
+  // document.getElementById('page_num').textContent = num;
+}
+
+/** If another page rendering in progress, waits until the rendering is
+ * finised. Otherwise, executes rendering immediately.
+ */
+var queueRenderPage = function (num) {
+  if (pageRendering) {
+    pageNumPending = num;
+  } else {
+    renderPage(num);
+  }
+}
+/** Displays previous page. */
+var onPrevPage =  function () {
+  // if (pageNum <= 1) {     return;  }
+  if (l_page <= 1) {     return;  }
+  // pageNum--;
+  // queueRenderPage(pageNum);
+
+  l_page --;
+  load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' ) )
+
+}
+document.getElementById('prev').addEventListener('click', onPrevPage);
+
+/** Displays next page. */
+var onNextPage =function() {
+  // if (pageNum >= pdfDoc.numPages) {   return; }
+  if (l_page >= page_total) {   return; }
+  // pageNum++;
+  // queueRenderPage(pageNum);
+  l_page++;
+  load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' ) )
+
+}
+document.getElementById('next').addEventListener('click', onNextPage);
+
+/** Zoom IN +  */
+var onZoomIn = function(){
+	// console.log("zoomIn");
+	scale = scale + 0.25;
+    renderPage(pageNum);
+}
+/** Zoom OUT -  */
+var onZoomOut =function(){
+	// console.log("zoomOut");
+    if (scale <= 0.25) {    return;        }
+	scale = scale - 0.25;
+    renderPage(pageNum);
+}
+document.getElementById('zoom_in').addEventListener('click', onZoomIn);
+document.getElementById('zoom_out').addEventListener('click', onZoomOut);
+document.getElementById('page_num2').addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+  	l_page = parseInt(document.getElementById('page_num2').value);
+  	if (l_page > page_total || l_page < 1 ) {   return;  }
+	  // queueRenderPage(pageNum2);
+    load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' ) )
+  }
+});
+
+/**  load PDF
+ * Asynchronously downloads PDF.
+*/
+
+ var build_url = function(l_doc_name , l_page , l_type , l_vers , l_lang , l_req ) {
+  document.getElementById('page_num2').textContent = l_page;
+  document.getElementById('page_num2').value = l_page;
+
+  if (!window.location.origin) {
+			  window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+			}
+  var t_url = window.location.origin +  '/node/pdfhandler?sap-client=200&REQ_NAME=' + l_req + 
+                                      '&DOC_NAME=' +  l_doc_name + 
+                                      '&DOC_PAGE=' +  l_page     + 
+                                      '&DOC_TYPE=' +  l_type     +
+                                      '&DOC_VERS=' +  l_vers     + 
+                                      '&DOC_LANG=' +  l_lang ;
+  return t_url; 
+}  
+
+function parse_query_string(query) {
+  var vars = query.split("&");
+  var query_string = {};
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    var key = decodeURIComponent(pair[0]);
+    var value = decodeURIComponent(pair[1]);
+    // If first entry with this name
+    if (typeof query_string[key] === "undefined") {
+      query_string[key] = decodeURIComponent(value);
+      // If second entry with this name
+    } else if (typeof query_string[key] === "string") {
+      var arr = [query_string[key], decodeURIComponent(value)];
+      query_string[key] = arr;
+      // If third or later entry with this name
+    } else {
+      query_string[key].push(decodeURIComponent(value));
+    }
+  }
+  return query_string;
+}
+
+
+
+ var init = function( ){
+    // get URL Params!  
+    var surl = window.location.href; 
+    var ourl = new URL(surl);
+    
+    // new browsers ... 
+    // l_doc_name = ourl.searchParams.get("DOC_NAME");
+    // l_page     = ourl.searchParams.get("DOC_PAGE");
+    // l_type     = ourl.searchParams.get("DOC_TYPE");
+    // l_vers     = ourl.searchParams.get("DOC_VERS");
+    // l_lang     = ourl.searchParams.get("DOC_LANG");
+    
+    // old broswsers
+    var query = window.location.search.substring(1);
+    var qs = parse_query_string(query);
+    l_doc_name = qs.DOC_NAME;
+    l_page     = qs.DOC_PAGE;
+    l_type     = qs.DOC_TYPE;
+    l_vers     = qs.DOC_VERS;
+    l_lang     = qs.DOC_LANG;
+
+
+    var l_url_i = build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_INF' );
+    console.log(l_url_i);
+    document.getElementById('docName').textContent = l_doc_name;
+
+    /** Ajax call to get information **/ 
+    // JQUERY 
+      // $.ajax({   url:l_url_i,  context: document.body   
+      // }).done(function() {
+      //   // $( this ).addClass( "done" );
+      //   document.getElementById('page_count').textContent = 20;
+      // });
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(this.responseText);
+        var oRT = JSON.parse(this.responseText); 
+        page_total = oRT.pageno; 
+        document.getElementById('page_count').textContent = page_total;
+      }
+    };
+    xhttp.open("GET", l_url_i, true);
+    xhttp.send();
+
+    var l_url_d = build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' );
+    load_PDF(l_url_d); 
+
+}
+
+
+ var load_PDF = function(url, pageNum ){
+  console.log("PDF: " + url )
+  if (!pageNum) pageNum = 1;
+
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        // console.log(this.responseText);
+        var l_response = this.responseText; 
+        var pdfData = atob( l_response);
+        PDFJS.getDocument({data: pdfData}).then(function(pdfDoc_) {
+          pdfDoc = pdfDoc_;
+          // Initial/first page rendering
+          renderPage(pageNum);
+        });
+      }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
+
+
+
+
+  // PDFJS.getDocument(url).then(function(pdfDoc_) {
+  //   pdfDoc = pdfDoc_;
+  //   // Initial/first page rendering
+  //   renderPage(pageNum);
+  // });
+}
+
+
+ var test = function(){
+
+  var pdfData = atob(
+    'JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwog' +
+    'IC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKICAvVHlwZSAvUGFnZXMKICAv' +
+    'TWVkaWFCb3ggWyAwIDAgMjAwIDIwMCBdCiAgL0NvdW50IDEKICAvS2lkcyBbIDMgMCBSIF0K' +
+    'Pj4KZW5kb2JqCgozIDAgb2JqCjw8CiAgL1R5cGUgL1BhZ2UKICAvUGFyZW50IDIgMCBSCiAg' +
+    'L1Jlc291cmNlcyA8PAogICAgL0ZvbnQgPDwKICAgICAgL0YxIDQgMCBSIAogICAgPj4KICA+' +
+    'PgogIC9Db250ZW50cyA1IDAgUgo+PgplbmRvYmoKCjQgMCBvYmoKPDwKICAvVHlwZSAvRm9u' +
+    'dAogIC9TdWJ0eXBlIC9UeXBlMQogIC9CYXNlRm9udCAvVGltZXMtUm9tYW4KPj4KZW5kb2Jq' +
+    'Cgo1IDAgb2JqICAlIHBhZ2UgY29udGVudAo8PAogIC9MZW5ndGggNDQKPj4Kc3RyZWFtCkJU' +
+    'CjcwIDUwIFRECi9GMSAxMiBUZgooSGVsbG8sIHdvcmxkISkgVGoKRVQKZW5kc3RyZWFtCmVu' +
+    'ZG9iagoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEwIDAwMDAwIG4g' +
+    'CjAwMDAwMDAwNzkgMDAwMDAgbiAKMDAwMDAwMDE3MyAwMDAwMCBuIAowMDAwMDAwMzAxIDAw' +
+    'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
+    'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G');
+
+
+  PDFJS.getDocument({data: pdfData}).then(function(pdfDoc_) {
+    pdfDoc = pdfDoc_;
+    // Initial/first page rendering
+    renderPage(pageNum);
+  });
+
+
+}
+
+// document.addEventListener('contextmenu', event => event.preventDefault());
+var onStatus=function(){
+	console.log("Status of the connection to the server");	
+} 
+var onInformation=function(){
+	console.log("Information of the document? ");
+  // document.getElementById("popup").show();
+  // $('.hover_bkgr_fricc').show();
+}
+
+ var closePopup = function() {
+  // document.getElementById("popup").style.display = "none";
+  // document.getElementById("popup").hide();
+}
+
+var onExit =  function(){
+	console.log("Exit-clear cache by reloading the page");
+	// window.location.href = window.location.origin + window.location.pathname;
+	// window.location.search = "";
+	// window.location.reload(true);
+	
+}
+// document.getElementById('st').addEventListener('click', onStatus );
+// document.getElementById('Inf').addEventListener('click', onInformation );
+// document.getElementById('Exit').addEventListener('click', onExit);
+// document.getElementById("popup").addEventListener('click', function(){
+//         // $('.hover_bkgr_fricc').hide();
+//         document.getElementById("popup").hide();
+//     });
+// $('.hover_bkgr_fricc').click(function(){ console.log("close P"); $('.hover_bkgr_fricc').hide(); });
+// $('.popupCloseButton').click(function(){   $('.hover_bkgr_fricc').hide();  });
+
+init()
+
+</script>
+</html>
