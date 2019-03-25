@@ -14,7 +14,9 @@
 	<Page
 		title="nabi.m.PDFViewer" showNavButton="true" navButtonPress="onNavBack">
 		<content>
-			<nabi:PDFViewer source="static/OpenUI5.pdf"/>
+			<Button	text="test"	press="onButtonPress">	</Button>
+			<!--<nabi:PDFViewer source="static/OpenUI5.pdf"/>-->
+			<nabi:PDFViewer source="{/pdfsource}"/>
 		</content>
 	</Page>
 	
