@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="UTF-8">
+
+		<title>MyLibraryDemoApp</title>
+
+		<script id="sap-ui-bootstrap" data-sap-ui-libs="sap.m" data-sap-ui-theme="sap_belize" data-sap-ui-compatversion="edge" data-sap-ui-resourceroots="{&quot;nabi.demo.MyLibraryDemoApp&quot;: &quot;&quot; }" src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"> 
+			//data-sap-ui-resourceroots='{"nabi.demo.MyLibraryDemoApp": "" }'
+			//src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js" > 
+			// 	src="../../resources/sap-ui-core.js"	>
+			//	data-sap-ui-resourceroots='{"be.wl.PDFExample": ""}'
+		</script>
+	
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+
+		<script>
+			/* */
+			sap.ui.getCore().attachInit(function() {
+				// new sap.m.Shell({
+					// app: new sap.ui.core.ComponentContainer({
+					// 	height : "100%",
+					// 	name : "nabi.demo.MyLibraryDemoApp"
+					// })
+				new sap.m.App ({
+					  pages: [ 
+					  		new sap.m.Page({  enableScrolling : false,  showHeader:false , 
+					  			//content: [	new sap.m.Button({	text:"Go to nabi.m.ImageFileUploader"  press=function(){console.log("hello") }  })  ] })
+								content: [ new sap.ui.core.ComponentContainer({  height : "100%", name : "nabi.demo.MyLibraryDemoApp"  })]  })
+					  ]
+				}).placeAt("content");
+			});
+		</script>
+	
+	<style>.facadebtn{display:inline-block;width:60px;height:60px;background-color:#009de0;border-radius:50px;text-align:center;box-shadow: 2px 2px 3px #999;opacity:.3;}
+.facadebtn .sapUiIcon{color:#FFF;font-size:1.5rem;cursor:pointer;line-height:60px;width:60px;}
+.facadebtn:hover{opacity:1;}
+#interactive.viewport video{width:320px;height:240px;}
+.facade .sapMSLITitleOnly, .facade .sapMILILabel {font-size: 1rem;}
+#interactive.viewport .drawingBuffer{width:320px;height:240px;position:absolute;}
+</style>
+<script type="text/javascript">
+
+window._facadeSettings = {"cordova-plugin-device-orientation":false,"accelerometer":{},"compass":{}};
+	window.sIdeOrigin = "https://webidecp-p1941269055trial.dispatcher.hanatrial.ondemand.com";
+	window.sap_webide_FacadePreview = true;
+	window.sFacadePath = "https://webidecp-p1941269055trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/cordovafacade/cordova.js";
+	window.sFacadeCfgViewPath = "https://webidecp-p1941269055trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/view/";
+	window.bridgeHtml = "https://webidecp-p1941269055trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/cordovafacade/MessageBridge.html";
+	window.msgDefPath = "https://webidecp-p1941269055trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/mobileextend/MessageDef.js";
+	window.msgBridgePath = "https://webidecp-p1941269055trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/mobileextend/MessageBridge.js";
+	window.meCssPath = "https://webidecp-p1941269055trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/css/mobileExtend.css";
+</script>
+<script src="https://webidecp-p1941269055trial.dispatcher.hanatrial.ondemand.com/hatdi_uf2d18766/hybrid/cordovafacade/floatingButton.js" type="text/javascript"></script>
+</head>
+
+	<body class="sapUiBody" id="content">
+		<!--<button onclick="myFunction()">test button</button>-->
+		<!--<br>-->
+		<!--<iframe width="500px" height = "500px" id='frame'></iframe>-->
+		<!--<canvas id="the-canvas"></canvas>-->
+		<!--test-->
+		<!--<p id="demo"></p>-->
+	<script>
+	function myFunction() {
+		// document.getElementById("demo").innerHTML = "Hello World";
+		console.log("button1")
+	    var btn = document.createElement("BUTTON");
+	    var t = document.createTextNode("CLICK ME");
+	    btn.appendChild(t);
+	    document.body.appendChild(btn);
+
+	     var sViewerPath, sThirdPartyPath;
+		 sThirdPartyPath = jQuery.sap.getModulePath("nabi.m.thirdparty");
+		 //sViewerPath = sThirdPartyPath + "/pdfjs/web/viewer.html";
+		 sViewerPath = "./libs/nabi/m/thirdparty/pdfjs/web/viewer.html";
+		 var src =  sViewerPath + "?file=" + "OpenUI5.pdf"
+	     document.getElementById("frame").src = src;
+	}
+	</script>
+	</body>
+	
+</html>
+

@@ -4,7 +4,7 @@
 			displayBlock="true" xmlns="sap.m" xmlns:u="sap.ui.unified" 
 			xmlns:pdf="ui5lab.wl.pdf">
 	<Page
-		title="nabi.m.OLPDFViewer"
+		title="OLD PDFViewer"
 		showNavButton="true"
 		navButtonPress="onNavBack">
 		<content>

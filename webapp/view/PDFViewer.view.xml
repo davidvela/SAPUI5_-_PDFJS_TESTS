@@ -12,7 +12,7 @@
 	<nabi:PDFViewer source="static/OpenUI5.pdf"/>
 	-->
 	<Page
-		title="nabi.m.PDFViewer" showNavButton="true" navButtonPress="onNavBack">
+		title="New PDFViewer" showNavButton="true" navButtonPress="onNavBack">
 		<content>
 			<Button	text="test"	press="onButtonPress">	</Button>
 			<!--<nabi:PDFViewer source="static/OpenUI5.pdf"/>-->
