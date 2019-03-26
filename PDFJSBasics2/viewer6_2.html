@@ -1,0 +1,602 @@
+<!-- v6.2 - Carousel-->
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="extras/jquery.min.1.7.js"></script>
+  <script type="text/javascript" src="extras/modernizr.2.5.3.min.js"></script>
+  <script type="text/javascript" src="build/hash.js"></script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width = 320, initial-scale = 1.0, user-scalable = no">
+  <link rel="apple-touch-icon" href="images/sapui5.png">
+<link rel="apple-touch-icon" sizes="152x152" href="images/sapui5.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/sapui5.png">
+<link rel="apple-touch-icon" sizes="167x167" href="images/sapui5.png">
+  <style>
+body {font-family: Verdana, sans-serif; margin:0}
+.mySlides {display: none;}
+img {vertical-align: middle;}
+
+    html { height:100%; }
+body { position:absolute; top:0; bottom:0; right:0; left:0; background-color: rgba(237, 237, 237, 0.8);  overflow: hidden;}
+
+/* Slideshow container */
+.slideshow-container {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+}
+
+.watermark {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: rotate(45deg);
+  text-align: center;
+  font-weight: bold;
+  font-size: 60px;
+  z-index: 99;
+  color: rgba(0, 0, 0, 0.19);
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 12px;
+  margin-top: -22px;
+  color: rgb(165, 165, 165);
+  font-weight: bold;
+  font-size: 12px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 5;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: grey;
+  color: rgb(255, 255, 255);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+.header-container {
+   background-color: rgb(255, 255, 255);
+   height: 60px;
+   color:  grey;
+   font-size: 12px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+   display: block;
+   z-index: 5;
+   position: relative;
+}
+
+.header-input {
+   background-color: grey;
+   height: 60px;
+   width: 60px;
+   color:  grey;
+   font-size: 12px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+   z-index: 6;
+}
+
+.mySlides {
+    margin: auto;
+    text-align: center;
+    height: 100%;
+}
+
+.input {
+     height: 60px;
+     width: 60px;
+     background-color: grey;
+     border: 0px;
+     border-radius: 0px;
+     color: white;
+     text-align: center;
+}
+
+.pdfviewer {
+    overflow: auto;
+    height: 90%;
+    background-size: fixed;
+}
+.logo {
+    position: absolute;
+        height: 50px;
+        width: 60px;
+        border: 0px;
+        right: 10px;
+        top: 5px;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+  z-index: 3;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+#zoom_out {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: grey;
+    background-color: white;
+    border: 0px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#zoom_in {
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: grey;
+    background-color: white;
+    border: 1px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#the-canvas {
+  margin: auto;
+}
+
+#zoom_out:hover, #zoom_in:hover {
+  background-color: grey;
+  color: white;
+}
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .prev, .next,.text {font-size: 11px}
+}
+  </style>
+</head>
+<body>
+    <div class="header-container" id="toolbar">
+        <!--<div class="header-input">  -->
+        <input id="page_num2" class="input" type="text" size="1" maxlength="4" value="1">
+        <!-- </div>  -->
+        of <span id="page_count" >33</span>
+        <h4 id="docName">Document Name</h4>
+
+        <img class="logo" src="./images/sapui5.png" alt="logo">
+    </div>
+
+    <div class="pdfviewer">
+      <div class="watermark">Water Mark</div>
+      <!-- <a id="prev" class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a id="next"  class="next" onclick="plusSlides(1)">&#10095;</a>     -->
+
+      <a id="prev" class="prev" >&#10094;</a>
+      <a id="next"  class="next">&#10095;</a>
+
+      <button id="zoom_out">-</button>
+      <button id="zoom_in">+</button>
+
+        <div class="slideshow-container">
+          <div class="mySlides fade">
+              <canvas id="the-canvas"></canvas>
+          </div>
+        </div>
+      </div>
+    <br>
+</body>
+
+<script>
+  document.addEventListener('gesturestart', function (e) {   e.preventDefault();  });
+  document.ontouchmove = function(event){    event.preventDefault();			}
+  document.addEventListener('touchstart', handleTouchStart, false);
+  document.addEventListener('touchmove', handleTouchMove, false);
+  var xDown = null;
+  var yDown = null;
+  function handleTouchStart(evt) {   xDown = evt.touches[0].clientX;  yDown = evt.touches[0].clientY;	};
+  function handleTouchMove(evt) {
+    if ( ! xDown || ! yDown ) {
+        return;
+    }
+    var xUp = evt.touches[0].clientX;
+    var yUp = evt.touches[0].clientY;
+    var xDiff = xDown - xUp;
+    var yDiff = yDown - yUp;
+
+    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+        if ( xDiff > 0 ) {
+            onNextPage();
+        } else {
+            onPrevPage();
+        }
+    } else {
+        if ( yDiff > 0 ) {
+        /* up swipe */
+        } else {
+        /* down swipe */
+        }
+    }
+    /* reset values */
+    xDown = null;
+    yDown = null;
+};
+  
+  var slideIndex = 1;
+  showSlides(slideIndex);
+  function toggleToolbar() {
+    var toolbar = document.getElementById("toolbar");
+    if(toolbar.style.display === "block") {
+      toolbar.style.display = "none";
+    }
+    else{
+      toolbar.style.display = "block";
+    }
+  }
+  function plusSlides(n) {    showSlides(slideIndex += n);	  }
+  function currentSlide(n) {  showSlides(slideIndex = n);     }
+  function showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    slides[slideIndex-1].style.display = "block";
+  }
+</script>
+
+<!-- *************************************** -->
+<!--        SCRIPTS                          -->
+<!-- *************************************** -->
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script> 
+<!--<script src="build/pdf.js"></script>-->
+
+ <!--import PDFJSWorker from "worker-loader!pdfjs-dist/build/pdf.worker.js"; -->
+<script src="build/pdf.worker.js" ></script>
+<!-- <script src="viewer.js"></script> -->
+
+
+<script> console.log("Script -- v6.2")
+// If absolute URL from the remote server is provided, configure the CORS
+// header on that server.
+
+var url = 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
+// var url = 'https://server.com/node/pdfhandler?sap-client=200&REQ_NAME=PDF_DOC&DOC_NAME=OPENUI5&DOC_PAGE=2&DOC_TYPE=PDF&DOC_VERS=2.2&DOC_LANG=EN';
+// var url = 'compressed.tracemonkey-pldi-09.pdf';
+// The workerSrc property shall be specified.
+
+// PDFJS lib declaration
+var pdfjsLib = window['pdfjs-dist/build/pdf'];
+//pdfjsLib.workerSrc = 'build/pdf.worker.js';
+
+//?DOC_NAME=OPENUI5&DOC_PAGE=1&DOC_TYPE=PDF&DOC_VERS=2.2&DOC_LANG=EN
+
+var pdfDoc = null,
+    pageNum  = 1,
+    page_total = 14,
+    pageRendering = false,
+    pageNumPending = null,
+    scale = 1.25,
+    canvas = document.getElementById('the-canvas'),
+    ctx = canvas.getContext('2d');
+
+var l_doc_name = "DOC_NAME", l_page = 1, l_type = "DOC_TYPE", l_vers = "DOC_VERS", l_lang = "DOC_LANG";
+var renderPage= function ( num ){
+  pageRendering = true;
+  // Using promise to fetch the page
+  pdfDoc.getPage(num).then(function(page) {
+    var viewport = page.getViewport(scale);
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    // Render PDF page into canvas context
+    var renderContext = {
+      canvasContext: ctx,
+      viewport: viewport
+    };
+    var renderTask = page.render(renderContext);
+    // Wait for rendering to finish
+    renderTask.promise.then(function() {
+      pageRendering = false;
+      if (pageNumPending !== null) {
+        // New page rendering is pending
+        renderPage(pageNumPending);
+        pageNumPending = null;
+      }
+    });
+  });
+  // Update page counters
+  // document.getElementById('page_num').textContent = num;
+}
+var queueRenderPage = function (num) {
+  if (pageRendering) {
+    pageNumPending = num;
+  } else {
+    renderPage(num);
+  }
+}
+var onPrevPage =  function () {
+  // if (pageNum <= 1) {     return;  }
+  if (l_page <= 1) {     return;  }
+  // pageNum--;
+  // queueRenderPage(pageNum);
+
+  l_page --;
+  load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' ) , l_page)
+
+}
+document.getElementById('prev').addEventListener('click', onPrevPage);
+var onNextPage =function() {
+  // if (pageNum >= pdfDoc.numPages) {   return; }
+  if (l_page >= page_total) {   return; }
+  // pageNum++;
+  // queueRenderPage(pageNum);
+  l_page++;
+  load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' ) , l_page)
+
+}
+document.getElementById('next').addEventListener('click', onNextPage);
+var onZoomIn = function(){
+  // console.log("zoomIn");
+  scale = scale + 0.25;
+    renderPage(pageNum);
+}
+var onZoomOut =function(){
+  // console.log("zoomOut");
+    if (scale <= 0.25) {    return;        }
+  scale = scale - 0.25;
+    renderPage(pageNum);
+}
+document.getElementById('zoom_in').addEventListener('click', onZoomIn);
+document.getElementById('zoom_out').addEventListener('click', onZoomOut);
+document.getElementById('page_num2').addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    l_page = parseInt(document.getElementById('page_num2').value);
+    if (l_page > page_total || l_page < 1 ) {   return;  }
+    // queueRenderPage(pageNum2);
+    load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' ), l_page )
+  }
+});
+
+/**  load PDF  * Asynchronously downloads PDF. */
+function parse_query_string(query) {
+  var vars = query.split("&");
+  var query_string = {};
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    var key = decodeURIComponent(pair[0]);
+    var value = decodeURIComponent(pair[1]);
+    // If first entry with this name
+    if (typeof query_string[key] === "undefined") {
+      query_string[key] = decodeURIComponent(value);
+      // If second entry with this name
+    } else if (typeof query_string[key] === "string") {
+      var arr = [query_string[key], decodeURIComponent(value)];
+      query_string[key] = arr;
+      // If third or later entry with this name
+    } else {
+      query_string[key].push(decodeURIComponent(value));
+    }
+  }
+  return query_string;
+}
+ var build_url = function(l_doc_name , l_page , l_type , l_vers , l_lang , l_req ) {
+  document.getElementById('page_num2').textContent = l_page;
+  document.getElementById('page_num2').value = l_page;
+
+  if (!window.location.origin) {
+        window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+      }
+  var t_url = window.location.origin +  '/node/pdfhandler?sap-client=200&REQ_NAME=' + l_req +
+                                      '&DOC_NAME=' +  l_doc_name +
+                                      '&DOC_PAGE=' +  l_page     +
+                                      '&DOC_TYPE=' +  l_type     +
+                                      '&DOC_VERS=' +  l_vers     +
+                                      '&DOC_LANG=' +  l_lang ;
+  return t_url;
+}
+ var init = function( ){
+    // get URL Params!
+    var surl = window.location.href;
+    var ourl = new URL(surl);
+
+    // new browsers ...
+    // l_doc_name = ourl.searchParams.get("DOC_NAME");
+    // l_page     = ourl.searchParams.get("DOC_PAGE");
+    // l_type     = ourl.searchParams.get("DOC_TYPE");
+    // l_vers     = ourl.searchParams.get("DOC_VERS");
+    // l_lang     = ourl.searchParams.get("DOC_LANG");
+
+    // old broswsers
+    var query = window.location.search.substring(1);
+    var qs = parse_query_string(query);
+    l_doc_name = qs.DOC_NAME;
+    l_page     = qs.DOC_PAGE;
+    l_type     = qs.DOC_TYPE;
+    l_vers     = qs.DOC_VERS;
+    l_lang     = qs.DOC_LANG;
+
+
+    var l_url_i = build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_INF' );
+    console.log(l_url_i);
+    document.getElementById('docName').textContent = l_doc_name;
+	
+	pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            // document.getElementById('page_count').textContent = pdfDoc.numPages;
+            // Initial/first page rendering
+            renderPage(pageNum);
+            
+          });
+    pdfjsLib.workerSrc = '../build/pdf.worker.js';
+	
+	return; 
+    /** Ajax call to get information **/
+    // JQUERY
+      // $.ajax({   url:l_url_i,  context: document.body
+      // }).done(function() {
+      //   // $( this ).addClass( "done" );
+      //   document.getElementById('page_count').textContent = 20;
+      // });
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(this.responseText);
+        var oRT = JSON.parse(this.responseText);
+        page_total = oRT.pageno;
+        document.getElementById('page_count').textContent = page_total;
+      }
+    };
+    xhttp.open("GET", l_url_i, true);
+    xhttp.send();
+
+    var l_url_d = build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' );
+    load_PDF(l_url_d, l_page);
+
+}
+ var load_PDF = function(url, pageNum ){
+  console.log("PDF: " + url )
+  if (!pageNum) pageNum = 1;
+  renderPage(pageNum);
+	
+  return;
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        // console.log(this.responseText);
+        var l_response = this.responseText;
+        var pdfData = atob( l_response);
+        PDFJS.getDocument({data: pdfData}).then(function(pdfDoc_) {
+          pdfDoc = pdfDoc_;
+          // Initial/first page rendering
+          renderPage(pageNum);
+        });
+      }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
+
+
+
+
+  // PDFJS.getDocument(url).then(function(pdfDoc_) {
+  //   pdfDoc = pdfDoc_;
+  //   // Initial/first page rendering
+  //   renderPage(pageNum);
+  // });
+}
+ var test = function(){
+
+  var pdfData = atob(
+    'JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwog' +
+    'IC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKICAvVHlwZSAvUGFnZXMKICAv' +
+    'TWVkaWFCb3ggWyAwIDAgMjAwIDIwMCBdCiAgL0NvdW50IDEKICAvS2lkcyBbIDMgMCBSIF0K' +
+    'Pj4KZW5kb2JqCgozIDAgb2JqCjw8CiAgL1R5cGUgL1BhZ2UKICAvUGFyZW50IDIgMCBSCiAg' +
+    'L1Jlc291cmNlcyA8PAogICAgL0ZvbnQgPDwKICAgICAgL0YxIDQgMCBSIAogICAgPj4KICA+' +
+    'PgogIC9Db250ZW50cyA1IDAgUgo+PgplbmRvYmoKCjQgMCBvYmoKPDwKICAvVHlwZSAvRm9u' +
+    'dAogIC9TdWJ0eXBlIC9UeXBlMQogIC9CYXNlRm9udCAvVGltZXMtUm9tYW4KPj4KZW5kb2Jq' +
+    'Cgo1IDAgb2JqICAlIHBhZ2UgY29udGVudAo8PAogIC9MZW5ndGggNDQKPj4Kc3RyZWFtCkJU' +
+    'CjcwIDUwIFRECi9GMSAxMiBUZgooSGVsbG8sIHdvcmxkISkgVGoKRVQKZW5kc3RyZWFtCmVu' +
+    'ZG9iagoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEwIDAwMDAwIG4g' +
+    'CjAwMDAwMDAwNzkgMDAwMDAgbiAKMDAwMDAwMDE3MyAwMDAwMCBuIAowMDAwMDAwMzAxIDAw' +
+    'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
+    'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G');
+
+
+  PDFJS.getDocument({data: pdfData}).then(function(pdfDoc_) {
+    pdfDoc = pdfDoc_;
+    // Initial/first page rendering
+    renderPage(pageNum);
+  });
+
+
+}
+ var onStatus=function(){
+  console.log("Status of the connection to the server");
+}
+ var onInformation=function(){
+  console.log("Information of the document? ");
+  // document.getElementById("popup").show();
+  // $('.hover_bkgr_fricc').show();
+}
+ var closePopup = function() {
+  // document.getElementById("popup").style.display = "none";
+  // document.getElementById("popup").hide();
+}
+ var onExit =  function(){
+  console.log("Exit-clear cache by reloading the page");
+  // window.location.href = window.location.origin + window.location.pathname;
+  // window.location.search = "";
+  // window.location.reload(true);
+
+}
+
+// document.addEventListener('contextmenu', event => event.preventDefault());
+// document.getElementById('st').addEventListener('click', onStatus );
+// document.getElementById('Inf').addEventListener('click', onInformation );
+// document.getElementById('Exit').addEventListener('click', onExit);
+// document.getElementById("popup").addEventListener('click', function(){
+//         // $('.hover_bkgr_fricc').hide();
+//         document.getElementById("popup").hide();
+//     });
+// $('.hover_bkgr_fricc').click(function(){ console.log("close P"); $('.hover_bkgr_fricc').hide(); });
+// $('.popupCloseButton').click(function(){   $('.hover_bkgr_fricc').hide();  });
+
+init()
+
+</script>
+</html>
