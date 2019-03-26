@@ -25,7 +25,19 @@ body { position:absolute; top:0; bottom:0; right:0; left:0; background-color: rg
   height: 100%;
   margin: auto;
 }
-
+    
+/* printer blocker*/
+    #printContainer {
+      display: none;
+    }
+    @media print {
+      /* General rules for printing. */
+      body {
+        background: transparent none;
+        display: none;   /*block control P  */
+      }
+    }
+        
 /* Watermark */
 .watermark {
   position: absolute;
@@ -340,7 +352,12 @@ body { position:absolute; top:0; bottom:0; right:0; left:0; background-color: rg
 <!-- <script src="viewer.js"></script> -->
 
 
-<script> console.log("Script -- v6.2")
+<script> console.log("Script -- v6.3")
+
+// disable right mouse click: 
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+
 // If absolute URL from the remote server is provided, configure the CORS
 // header on that server.
 
