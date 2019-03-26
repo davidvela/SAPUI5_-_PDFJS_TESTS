@@ -253,7 +253,7 @@ body { position:absolute; top:0; bottom:0; right:0; left:0; background-color: rg
     </div>
 
     <div class="pdfviewer">
-      <div class="watermark">Water Mark</div>
+      <div id="watermarkID" class="watermark">Water Mark</div>
       <!-- <a id="prev" class="prev" onclick="plusSlides(-1)">&#10094;</a>
       <a id="next"  class="next" onclick="plusSlides(1)">&#10095;</a>     -->
 
@@ -378,7 +378,8 @@ var pdfDoc = null,
     scale = 1.25,
     canvas = document.getElementById('the-canvas'),
     ctx = canvas.getContext('2d'), 
-    loader = document.getElementById('loading');
+    loader = document.getElementById('loading'), 
+    oWaterMark = document.getElementById('watermarkID');
 
 var l_doc_name = "DOC_NAME", l_page = 1, l_type = "DOC_TYPE", l_vers = "DOC_VERS", l_lang = "DOC_LANG";
 var renderPage= function ( num ){
@@ -497,6 +498,9 @@ document.getElementById('page_num2').addEventListener("keyup", function(event) {
   return t_url;
 }
  var init = function( ){
+    
+    oWaterMark.innerText = "Water Mark!! - person Name"
+    
     // get URL Params!
     var surl = window.location.href;
     var ourl = new URL(surl);
