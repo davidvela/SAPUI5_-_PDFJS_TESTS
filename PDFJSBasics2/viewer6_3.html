@@ -455,7 +455,11 @@ document.getElementById('zoom_out').addEventListener('click', onZoomOut);
 document.getElementById('page_num2').addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     l_page = parseInt(document.getElementById('page_num2').value);
-    if (l_page > page_total || l_page < 1 ) {   return;  }
+    // if (l_page > page_total || l_page < 1 ) {   return;  }
+
+    if(l_page > page_total){ l_page = page_total; }
+    if(l_page < 1 ){ l_page = 1; }
+    
     // queueRenderPage(pageNum2);
     load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_DOC' ), l_page )
   }
@@ -483,6 +487,9 @@ document.getElementById('page_num2').addEventListener("keyup", function(event) {
   return query_string;
 }
  var build_url = function(l_doc_name , l_page , l_type , l_vers , l_lang , l_req ) {
+  if(l_page === undefined ) {
+  	l_page = 1;
+  }
   document.getElementById('page_num2').textContent = l_page;
   document.getElementById('page_num2').value = l_page;
 
@@ -521,20 +528,20 @@ document.getElementById('page_num2').addEventListener("keyup", function(event) {
     l_vers     = qs.DOC_VERS;
     l_lang     = qs.DOC_LANG;
 
-
+	l_page = 1;
     var l_url_i = build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_INF' );
     console.log(l_url_i);
     document.getElementById('docName').textContent = l_doc_name;
-	
+
 	pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
             pdfDoc = pdfDoc_;
-            // document.getElementById('page_count').textContent = pdfDoc.numPages;
+            document.getElementById('page_count').textContent = pdfDoc.numPages; // NUMBER OF PAGES! 
             // Initial/first page rendering
             renderPage(pageNum);
             
           });
     pdfjsLib.workerSrc = '../build/pdf.worker.js';
-	
+
 	return; 
     /** Ajax call to get information **/
     // JQUERY
