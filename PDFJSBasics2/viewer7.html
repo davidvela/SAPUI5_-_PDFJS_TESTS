@@ -1,0 +1,614 @@
+<!-- v7 - Image!-->
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="extras/jquery.min.1.7.js"></script>
+  <script type="text/javascript" src="extras/modernizr.2.5.3.min.js"></script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width = 320, initial-scale = 1.0, user-scalable = no">
+
+<!-- styles  -->
+<style>
+body {font-family: Verdana, sans-serif; margin:0}
+.mySlides {display: none;}
+img {vertical-align: middle;}
+html { height:100%; }
+body { position:absolute; top:0; bottom:0; right:0; left:0; background-color: rgba(237, 237, 237, 0.8);  overflow: hidden;}
+
+/* Slideshow container */
+.slideshow-container {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+}
+
+/* printer blocker*/
+#printContainer {
+      display: none;
+    }
+    @media print {
+      /* General rules for printing. */
+      body {
+        background: transparent none;
+        display: none;   /*block control P  */
+      }
+    }
+
+/* Watermark */
+.watermark {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: rotate(45deg);
+  text-align: center;
+  font-weight: bold;
+  font-size: 60px;
+  z-index: 99;
+  color: rgba(0, 0, 0, 0.19);
+}
+
+
+
+/*loading*/
+#loading {
+   width: 100%;
+   height: 100%;
+   top: 0;
+   left: 0;
+   position: fixed;
+   display: block;
+   opacity: 0.7;
+   background-color: #fff;
+   z-index: 99;
+   text-align: center;
+}
+
+#loading-image {
+  /*position: absolute;*/
+  position: relative;
+  /*top: 100px;*/
+  /*left: 240px;*/
+  top: 200px;
+  left: 20px;  
+  z-index: 100;
+}
+
+
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 12px;
+  margin-top: -22px;
+  color: rgb(165, 165, 165);
+  font-weight: bold;
+  font-size: 12px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 5;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: grey;
+  color: rgb(255, 255, 255);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+.header-container {
+   background-color: rgb(255, 255, 255);
+   height: 60px;
+   color:  grey;
+   font-size: 12px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+   display: block;
+   z-index: 5;
+   position: relative;
+}
+
+.header-input {
+   background-color: grey;
+   height: 60px;
+   width: 60px;
+   color:  grey;
+   font-size: 12px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+   z-index: 6;
+}
+
+.mySlides {
+    margin: auto;
+    text-align: center;
+    height: 100%;
+}
+
+.input {
+     height: 60px;
+     width: 60px;
+     background-color: grey;
+     border: 0px;
+     border-radius: 0px;
+     color: white;
+     text-align: center;
+}
+
+.pdfviewer {
+    overflow: auto;
+    height: 90%;
+    background-size: fixed;
+}
+.logo {
+    position: absolute;
+        height: 50px;
+        width: 60px;
+        border: 0px;
+        right: 10px;
+        top: 5px;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+  z-index: 3;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+#zoom_out {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: grey;
+    background-color: white;
+    border: 0px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#zoom_in {
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: grey;
+    background-color: white;
+    border: 1px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#the-canvas {
+  margin: auto;
+}
+
+#zoom_out:hover, #zoom_in:hover {
+  background-color: grey;
+  color: white;
+}
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .prev, .next,.text {font-size: 11px}
+}
+</style>
+</head>
+<body>
+    <div class="header-container" id="toolbar">
+        <!--<div class="header-input">  -->
+        <input id="page_num2" class="input" type="text" size="1" maxlength="4" value="1">
+        <!-- </div>  -->
+        of <span id="page_count" >0</span>
+        <h4 id="docName">Document Name</h4>
+
+        <img class="logo" src="./images/sapui5.png" alt="sapui5">
+    </div>
+    <div class="pdfviewer">
+      <div id="watermarkID"  class="watermark">Water Mark</div>
+      <!-- <a id="prev" class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a id="next"  class="next" onclick="plusSlides(1)">&#10095;</a>     -->
+
+      <a id="prev" class="prev" >&#10094;</a>
+      <a id="next"  class="next">&#10095;</a>
+
+      <button id="zoom_out">-</button>
+      <button id="zoom_in">+</button>
+
+        <div class="slideshow-container">
+          <div class="mySlides fade">
+            <!-- image -->
+              <img id="the-canvas"></img> 
+          </div>
+        </div>
+      </div>
+
+      <div id="loading">
+        <img id="loading-image" src="images/ajax-loader.gif" alt="Loading..." />
+      </div>
+
+    <br>
+</body>
+
+<script>
+  // document.addEventListener('gesturestart', function (e) {    e.preventDefault();  });
+  // document.ontouchmove = function(event){    event.preventDefault();          }
+  // document.addEventListener('touchstart', handleTouchStart, false);
+  // document.addEventListener('touchmove', handleTouchMove, false);
+  var xDown = null;
+  var yDown = null;
+  function handleTouchStart(evt) {   xDown = evt.touches[0].clientX;   yDown = evt.touches[0].clientY;  };
+  function handleTouchMove(evt) {
+    if ( ! xDown || ! yDown ) {
+        return;
+    }
+    var xUp = evt.touches[0].clientX;
+    var yUp = evt.touches[0].clientY;
+    var xDiff = xDown - xUp;
+    var yDiff = yDown - yUp;
+
+    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+        if ( xDiff > 0 ) {
+            onNextPage();
+        } else {
+            onPrevPage();
+        }
+    } else {
+        if ( yDiff > 0 ) {
+        /* up swipe */
+        } else {
+        /* down swipe */
+        }
+    }
+    /* reset values */
+    xDown = null;
+    yDown = null;
+};
+
+  var slideIndex = 1;
+  showSlides(slideIndex);
+  function toggleToolbar() {
+    var toolbar = document.getElementById("toolbar");
+    if(toolbar.style.display === "block") {
+      toolbar.style.display = "none";
+    }
+    else{
+      toolbar.style.display = "block";
+    }
+  }
+  function plusSlides(n) {    showSlides(slideIndex += n);    }
+  function currentSlide(n) {  showSlides(slideIndex = n);     }
+  function showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    slides[slideIndex-1].style.display = "block";
+  }
+</script>
+
+<!-- *************************************** -->
+<!--        SCRIPTS                          -->
+<!-- *************************************** -->
+
+<script> console.log("Script -- v6.3")
+
+// disable right mouse click: 
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+var url = 'server/pdfhandler?sap-client=200&REQ_NAME=PDF_DOC&DOC_NAME=OPENUI5&DOC_PAGE=2&DOC_TYPE=PDF&DOC_VERS=2.2&DOC_LANG=EN';
+
+// ?????        ?DOC_NAME=OPENUI5&DOC_PAGE=1&DOC_TYPE=PDF&DOC_VERS=2.2&DOC_LANG=EN
+// 20190326 --  ?DOC_NAME=OPENUI5&DOC_PAGE=1&DOC_TYPE=PDF&DOC_VERS=00&DOC_LANG=EN
+
+var pdfDoc = null,
+    pageNum  = 1,
+    page_total = 14,
+    pageRendering = false,
+    pageNumPending = null,
+    scale = 1.25,
+    canvas = document.getElementById('the-canvas'),
+    loader = document.getElementById('loading'), 
+    oWaterMark = document.getElementById('watermarkID'), 
+    l_req_base = 'PDF_IMG';
+
+var l_doc_name = "DOC_NAME", l_page = 1, l_type = "DOC_TYPE", l_vers = "DOC_VERS", l_lang = "DOC_LANG";
+
+
+/** Get page info from document, resize canvas accordingly, and render page.
+ * @param num Page number.
+ */
+var renderPage= function ( num, data ){
+  loader.style.display = "none"
+  // canvas.src = "data:image/gif;base64," + data ; 
+  // canvas.src = "data:" + data ; 
+  canvas.src = 'data:image/jpeg;base64,' + btoa(data);
+
+  
+}
+var queueRenderPage = function (num) {
+  if (pageRendering) {
+    pageNumPending = num;
+  } else {
+    renderPage(num);
+  }
+}
+var onPrevPage =  function () {
+  // if (pageNum <= 1) {     return;  }
+  if (l_page <= 1) {     return;  }
+  // pageNum--;
+  // queueRenderPage(pageNum);
+
+  l_page --;
+  load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, l_req_base ) )
+
+}
+document.getElementById('prev').addEventListener('click', onPrevPage);
+var onNextPage =function() {
+  // if (pageNum >= pdfDoc.numPages) {   return; }
+  if (l_page >= page_total) {   return; }
+  // pageNum++;
+  // queueRenderPage(pageNum);
+  l_page++;
+  load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, l_req_base ) )
+
+}
+document.getElementById('next').addEventListener('click', onNextPage);
+var onZoomIn = function(){
+  // console.log("zoomIn");
+  scale = scale + 0.25;
+  
+  // renderPage(pageNum);
+}
+var onZoomOut =function(){
+  // console.log("zoomOut");
+    if (scale <= 0.25) {    return;        }
+    scale = scale - 0.25;
+    
+    // renderPage(pageNum);
+}
+document.getElementById('zoom_in').addEventListener('click', onZoomIn);
+document.getElementById('zoom_out').addEventListener('click', onZoomOut);
+document.getElementById('page_num2').addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    l_page = parseInt(document.getElementById('page_num2').value);
+    // if (l_page > page_total || l_page < 1 ) {   return;  }
+
+    if(l_page > page_total){ l_page = page_total; }
+    if(l_page < 1 ){ l_page = 1; }
+
+    // queueRenderPage(pageNum2);
+    load_PDF( build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, l_req_base) )
+  }
+});
+
+/**  load PDF  * Asynchronously downloads PDF.    */
+ function parse_query_string(query) {
+  var vars = query.split("&");
+  var query_string = {};
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    var key = decodeURIComponent(pair[0]);
+    var value = decodeURIComponent(pair[1]);
+    // If first entry with this name
+    if (typeof query_string[key] === "undefined") {
+      query_string[key] = decodeURIComponent(value);
+      // If second entry with this name
+    } else if (typeof query_string[key] === "string") {
+      var arr = [query_string[key], decodeURIComponent(value)];
+      query_string[key] = arr;
+      // If third or later entry with this name
+    } else {
+      query_string[key].push(decodeURIComponent(value));
+    }
+  }
+  return query_string;
+}
+ var build_url = function(l_doc_name , l_page , l_type , l_vers , l_lang , l_req ) {
+  document.getElementById('page_num2').textContent = l_page;
+  document.getElementById('page_num2').value = l_page;
+
+  if (!window.location.origin) {
+        window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+      }
+  var t_url = window.location.origin +  '/server/pdfhandler?sap-client=200&REQ_NAME=' + l_req +
+                                      '&DOC_NAME=' +  l_doc_name +
+                                      '&DOC_PAGE=' +  l_page     +
+                                      '&DOC_TYPE=' +  l_type     +
+                                      '&DOC_VERS=' +  l_vers     +
+                                      '&DOC_LANG=' +  l_lang ;
+  return t_url;
+}
+ var init = function( ){   
+    oWaterMark.innerText = "Water Mark!! - person Name";
+
+    var query = window.location.search.substring(1);
+    var qs = parse_query_string(query);
+    l_doc_name = qs.DOC_NAME;
+    l_page     = qs.DOC_PAGE;
+    l_type     = qs.DOC_TYPE;
+    l_vers     = qs.DOC_VERS;
+    l_lang     = qs.DOC_LANG;
+
+
+    var l_url_i = build_url(  l_doc_name, l_page, l_type, l_vers, l_lang, 'PDF_IMG' );
+    console.log(l_url_i);
+    document.getElementById('docName').textContent = l_doc_name;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        //pdf
+        var pageNum = 1; 
+        var l_response = this.responseText;
+        var pdfData =  l_response;
+        renderPage(pageNum, pdfData);
+        page_total = 100; 
+        //page_total = this.getResponseHeader("totalp"); 
+        document.getElementById('page_count').textContent = page_total;
+      }else if (this.readyState == 4 && this.status == 400){ // error message
+        // console.log(this.responseText)
+        handleError(this.responseText); 
+      }
+    };
+    // xhttp.open("GET", l_url_i, true);
+    // xhttp.send();
+        var pageNum = 1; 
+        var l_response = this.responseText;
+        var pdfData =  "";
+        renderPage(pageNum, pdfData);
+        page_total = 100; 
+        //page_total = this.getResponseHeader("totalp"); 
+        document.getElementById('page_count').textContent = page_total;
+        document.getElementById('page_count').innerText   = page_total;
+}
+ var load_PDF = function(url, pageNum ){
+  loader.style.display = "block"
+  console.log("PDF: " + url )
+  if (!pageNum) pageNum = 1;
+
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        // console.log(this.responseText);
+        var l_response = this.responseText;
+        // var pdfData = atob( l_response);
+        var pdfData = l_response ;
+        renderPage(pageNum, pdfData);
+      }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
+}
+ init()
+ function handleError(msg){
+    alert("Error:" + msg);
+    loader.style.display = "none"
+}
+
+// new functions: 
+// key press
+document.onkeydown = checkKey;
+function checkKey(e) {  e = e || window.event;
+		switch (e.keyCode) {
+			case 37:// left arrow
+				onPrevPage();break;
+			case 38:// up arrow
+				onPrevPage();break;
+			case 39:// right arrow
+				onNextPage();break;
+			case 40:// down arrow
+				onNextPage();break;
+			default:// nothing 
+			break;
+			} ;
+	}
+
+
+  var validNavigation = false;
+// closing event 
+function wireUpWindowUnloadEvents() {
+	
+ /*
+ * List of events which are triggered onbeforeunload on IE
+ * check http://msdn.microsoft.com/en-us/library/ms536907(VS.85).aspx
+ */
+ // Attach the event keypress to exclude the F5 refresh
+ $(document).on('keypress', function(e) {
+   if (e.keyCode == 116){
+     validNavigation = true;
+     console.log('F5 refresh')
+    }
+ });
+ // Attach the event click for all links in the page
+ $(document).on("click", "a" , function() {
+ 	validNavigation = true;
+    console.log('link press')
+ });
+ // Attach the event submit for all forms in the page
+ $(document).on("submit", "form" , function() {
+ 	 validNavigation = true;
+     console.log('submit form')
+ });
+ 
+ // Attach the event click for all inputs in the page
+ $(document).bind("click", "input[type=submit]" , function() {
+ 	 validNavigation = true;
+     console.log('input submit')
+ });
+  
+ $(document).bind("click", "button[type=submit]" , function() {
+ 	 validNavigation = true;
+     console.log('button submit')
+ });
+   
+}
+function windowCloseEvent() {
+        window.onbeforeunload = function(oEvent) {
+         validNavigation = false;
+         if (!validNavigation){
+          callServerForBrowserCloseEvent();
+         }
+        }
+}
+//https://www.oodlestechnologies.com/blogs/Capture-Browser-Or-Tab-Close-Event-Jquery-Javascript
+wireUpWindowUnloadEvents();
+windowCloseEvent();
+function callServerForBrowserCloseEvent()
+{
+ console.log("exit browser");
+}
+
+
+</script>
+</html>
